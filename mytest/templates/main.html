@@ -1,0 +1,37 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr valign="top">
+    <td height="100%">
+      <ul width="235" height="100%">
+        {% for tab in tables %}
+        <li> <a href="/{{ tab.name }}/">{{ tab.title }} </a></li>
+        {% endfor %}
+      </ul>
+    </td>
+
+    <td>
+        <table width="100%" border="2" cellspacing="0" cellpadding="0">
+          <tr>
+             {% for field in fields %}
+             <td><div>{{ field.title }}</div></td>
+             {% endfor %}
+          </tr> 
+      
+          {% for rec in records %}
+          <tr>
+             {% for value in rec %}
+             <td><div>{{ value }}</div></td>
+             {% endfor %}
+          </tr> 
+          {% endfor %}
+        </table>
+
+        <div>{{ cur_table.title }}. Добавление записи:</div>
+        <form method="post" action="">
+        {{ form.as_p }}
+        <input value="Add" class="button_submit" type="submit">
+        </form>
+    </td>
+
+  </tr>
+</table>
+  

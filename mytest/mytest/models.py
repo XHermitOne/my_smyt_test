@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import os.path
 import yaml
@@ -6,30 +8,18 @@ from django.db import models
 
 import mytest.settings
 
-# class TESTDynamicModel(object):
-#
-#     def __init__(self, record_id):
-#         self.record_id = record_id
-
-
 class TESTDynamicModelManager(object):
-    #title = models.CharField(max_length=100)
 
-    #class Meta:
-    #    models_data = None
-
-    # @property
-    # def model_set(self):
-    #     return TESTDynamicModel()
-
-    def _create_field(self, id, title, type):
+    def _create_field(self, id, title, type, length=0):
         """
         Создание поля по его описанию.
         """
         if type == 'int':
             return models.IntegerField()
         elif type == 'char':
-            return models.CharField(max_length=255)
+            if length <= 0:
+                length = 255
+            return models.CharField(max_length=length)
         elif type == 'date':
             return models.DateField()
 
@@ -82,10 +72,6 @@ class TESTDynamicModelManager(object):
         Метод возвращает динамически созданный класс модели с указанным
         именем, набором полей и мета-опций, унаследованный от указанного класса модели.
         """
-
-        # имя модели дополняем идентификатором строки модели-донора
-        #tab_name = 'dynamic%s_' % self.record_id + model_name
-
         class Meta:
             # обязательно указываем, к какому приложению принадлежит модель
             app_label = 'mytest'
@@ -112,9 +98,8 @@ class TESTDynamicModelManager(object):
 
 try:
     MODEL_MANAGER = TESTDynamicModelManager()
-    #for rec in TESTDynamicModelManager.objects.all():
-    DATA, MODELS = MODEL_MANAGER.load_models(mytest.settings.MODEL_YAML_FILENAME)
-    print('DATA: %s MODELS: %s' % (DATA, MODELS))
+    SCHEME, MODELS = MODEL_MANAGER.load_models(mytest.settings.MODEL_YAML_FILENAME)
+    print('DEBUG. SCHEME: %s MODELS: %s' % (SCHEME, MODELS))
 except:
     print('ERROR. Create dynamic models')
     raise

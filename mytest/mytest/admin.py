@@ -1,1 +1,1 @@
-__author__ = 'xhermit'
+# -*- coding: utf-8 -*-
