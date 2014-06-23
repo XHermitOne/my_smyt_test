@@ -7,16 +7,34 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanen
 import mytest.models
 import mytest.forms
 
+DEFAULT_DATE_FORMAT = '%Y-%m-%d'
+
 def add_new_record(request, cur_tab_name=None, *args, **kwargs):
     """
     Добавить новую запись в таблицу.
     """
-    print('DEBUG add rec', cur_tab_name, kwargs)
+    #print('DEBUG add rec', cur_tab_name, kwargs)
     model = mytest.models.MODELS.get(cur_tab_name, None)
     if model:
         new_rec = model(*args, **kwargs)
         new_rec.save()
 
+def update_record(request, tab_name=None, record_id=None, field_name=None, new_value=None):
+    """
+    Обновление значения записи.
+    """
+    model = mytest.models.MODELS.get(tab_name, None)
+    if model:
+        record = model.objects.get(id=int(record_id))
+        if record:
+            try:
+                if getattr(record, field_name) != new_value:
+                    setattr(record, field_name, new_value)
+                    record.save()
+            except:
+                print('ERROR Update record %s in table %s', record_id, tab_name)
+
+    return HttpResponseRedirect('/%s/' % tab_name)
 
 def main_view(request, cur_tab_name=None):
     """
@@ -53,7 +71,7 @@ def main_view(request, cur_tab_name=None):
         fields = mytest.models.SCHEME[cur_tab_name]['fields']
         field_names = [field['id'] for field in fields]
         context['fields'] = fields
-        context['records'] = [[{'value':getattr(rec, field_name),
+        context['records'] = [[{'value': getattr(rec, field_name).strftime(DEFAULT_DATE_FORMAT) if fields[i]['type'] == 'date' else getattr(rec, field_name),
                                 'field_name': field_name,
                                 'type': fields[i]['type'],
                                 'rec_id': rec.id} for i,field_name in enumerate(field_names)] for rec in mytest.models.MODELS[cur_tab_name].objects.all()]

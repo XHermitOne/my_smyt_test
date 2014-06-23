@@ -1,7 +1,7 @@
 /**
  * Created by xhermit on 23.06.14.
  */
-$(function() {
+$(document).ready(function() {
     $.datepicker.regional['ru'] = {
 		closeText: 'Закрыть',
 		prevText: '&#x3c;Пред',
@@ -22,7 +22,7 @@ $(function() {
 		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['ru']);
 
-        var dates = $('#datepicker, #datepicker_to').datepicker({
+        var dates = $('.datepicker').datepicker({
                 defaultDate: "+1w",
                 dateFormat: "yy-mm-dd",
                 option: $.datepicker.regional['ru'],
@@ -30,7 +30,7 @@ $(function() {
                 changeYear: true,
                 numberOfMonths: 1,
                 onSelect: function(selectedDate) {
-                        var option = this.id == "datepicker" ? "minDate" : "maxDate";
+                        var option = "minDate";
                         var instance = $(this).data("datepicker");
                         var date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
                         dates.not(this).datepicker("option", option, date);

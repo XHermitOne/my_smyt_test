@@ -40,4 +40,4 @@ class TESTDynamicForm(forms.Form):
         elif field['type'] == 'date':
             return forms.DateField(label=field['title'],
                                    input_formats=DATE_FORMATS,
-                                   widget=forms.TextInput(attrs={'id': 'datepicker'}))
+                                   widget=forms.TextInput(attrs={'class': 'datepicker'}))

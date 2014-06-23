@@ -6,10 +6,10 @@ admin.autodiscover()
 import mytest.views
 
 urlpatterns = patterns('',
-    # Examples:
-    url(r'^$', 'mytest.views.main_view'),
-    url(r'^(?P<cur_tab_name>[^/]+)/$', mytest.views.main_view),
-    # url(r'^blog/', include('blog.urls')),
-
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^$', mytest.views.main_view),
+    url(r'^update/(?P<tab_name>[^/]+)/(?P<record_id>[^/]+)/(?P<field_name>[^/]+)/(?P<new_value>[^/]+)/$', mytest.views.update_record),
+    url(r'^(?P<cur_tab_name>[^/]+)/$', mytest.views.main_view),
+
 )

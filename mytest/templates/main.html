@@ -1,11 +1,12 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
     <title>Тестовое задание</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-	<script type="text/javascript" src="/static/js/tools.js"></script>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 	<script type="text/javascript" src="/static/js/simple_datepicker.js"></script>
+	<script type="text/javascript" src="/static/js/cell_editors.js"></script>
 </head>
 <body>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -29,7 +30,7 @@
           {% for rec in records %}
           <tr>
              {% for cell in rec %}
-             <td><div onclick="clickCell('{{ cell.field_name }}', '{{ cell.type }}', '{{ cell.value }}', {{ cell.rec_id }})">{{ cell.value }}</div></td>
+             <td><div id="{{ cell.field_name}}_{{ cell.rec_id }}" class="data_cell" edit_type="{{ cell.type }}" cell_value="{{ cell.value }}" field_name="{{ cell.field_name}}" rec_id="{{ cell.rec_id}}" tab_name="{{ cur_tab_name }}">{{ cell.value }}</div></td>
              {% endfor %}
           </tr> 
           {% endfor %}
