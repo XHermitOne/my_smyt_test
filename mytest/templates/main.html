@@ -1,3 +1,13 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html>
+<head>
+    <title>Тестовое задание</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+	<script type="text/javascript" src="/static/js/tools.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<script type="text/javascript" src="/static/js/simple_datepicker.js"></script>
+</head>
+<body>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr valign="top">
     <td height="100%">
@@ -18,8 +28,8 @@
       
           {% for rec in records %}
           <tr>
-             {% for value in rec %}
-             <td><div>{{ value }}</div></td>
+             {% for cell in rec %}
+             <td><div onclick="clickCell('{{ cell.field_name }}', '{{ cell.type }}', '{{ cell.value }}', {{ cell.rec_id }})">{{ cell.value }}</div></td>
              {% endfor %}
           </tr> 
           {% endfor %}
@@ -28,10 +38,12 @@
         <div>{{ cur_table.title }}. Добавление записи:</div>
         <form method="post" action="">
         {{ form.as_p }}
-        <input value="Add" class="button_submit" type="submit">
+        <input value="Добавить" class="button_submit" type="submit">
+
         </form>
     </td>
 
   </tr>
 </table>
-  
+</body>
+</html>

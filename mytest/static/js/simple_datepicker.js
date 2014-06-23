@@ -1,5 +1,8 @@
+/**
+ * Created by xhermit on 23.06.14.
+ */
 $(function() {
-        $.datepicker.regional['ru'] = {
+    $.datepicker.regional['ru'] = {
 		closeText: 'Закрыть',
 		prevText: '&#x3c;Пред',
 		nextText: 'След&#x3e;',
@@ -12,7 +15,7 @@ $(function() {
 		dayNamesShort: ['вск','пнд','втр','срд','чтв','птн','сбт'],
 		dayNamesMin: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
 		weekHeader: 'Не',
-		dateFormat: 'dd.mm.yy',
+		dateFormat: 'yy-mm-dd',
 		firstDay: 1,
 		isRTL: false,
 		showMonthAfterYear: false,
@@ -21,7 +24,7 @@ $(function() {
 
         var dates = $('#datepicker, #datepicker_to').datepicker({
                 defaultDate: "+1w",
-                dateFormat: "dd/mm/yy",
+                dateFormat: "yy-mm-dd",
                 option: $.datepicker.regional['ru'],
                 changeMonth: true,
                 changeYear: true,
@@ -33,19 +36,4 @@ $(function() {
                         dates.not(this).datepicker("option", option, date);
                 }
         });
-        //dates.datepicker($.datepicker.regional['ru']);
-//        var dates2 = $('#datepicker2, #datepicker_to2').datepicker({
-//                defaultDate: "+1w",
-//                dateFormat: "dd/mm/yy",
-//                option: $.datepicker.regional['ru'],
-//                changeMonth: true,
-//                changeYear: true,
-//                numberOfMonths: 1,
-//                onSelect: function(selectedDate) {
-//                        var option = this.id == "datepicker2" ? "minDate" : "maxDate";
-//                        var instance = $(this).data("datepicker");
-//                        var date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
-//                        dates2.not(this).datepicker("option", option, date);
-//                }
-//        });
-})(django.jQuery);
+});

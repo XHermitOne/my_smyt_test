@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-#from django.contrib import widgets
-#from django import newforms
-# from django.forms.extras.widgets import SelectDateWidget
 
 DATE_FORMATS = ['%b %d %Y',      # 'Oct 25 2006'
                 '%b %d, %Y',      # 'Oct 25, 2006'
@@ -20,12 +17,11 @@ DATE_FORMATS = ['%b %d %Y',      # 'Oct 25 2006'
                 '%d.%m.%Y',       # '25.10.2006'
                 ]
 
+
 class TESTDynamicForm(forms.Form):
     """
     Динамическая форма.
     """
-    # class Media:
-    #     js = ('/static/js/click_datefield.js', )
 
     def __init__(self, model_data, *args, **kwargs):
         super(TESTDynamicForm, self).__init__(*args, **kwargs)
@@ -44,4 +40,4 @@ class TESTDynamicForm(forms.Form):
         elif field['type'] == 'date':
             return forms.DateField(label=field['title'],
                                    input_formats=DATE_FORMATS,
-                                   onClick='/static/js/click_datefield.js')
+                                   widget=forms.TextInput(attrs={'id': 'datepicker'}))

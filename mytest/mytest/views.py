@@ -17,9 +17,6 @@ def add_new_record(request, cur_tab_name=None, *args, **kwargs):
         new_rec = model(*args, **kwargs)
         new_rec.save()
 
-# def new_record(request, cur_tab_name=None):
-#     """
-#     """
 
 def main_view(request, cur_tab_name=None):
     """
@@ -56,7 +53,10 @@ def main_view(request, cur_tab_name=None):
         fields = mytest.models.SCHEME[cur_tab_name]['fields']
         field_names = [field['id'] for field in fields]
         context['fields'] = fields
-        context['records'] = [[getattr(rec, field_name) for field_name in field_names] for rec in mytest.models.MODELS[cur_tab_name].objects.all()]
+        context['records'] = [[{'value':getattr(rec, field_name),
+                                'field_name': field_name,
+                                'type': fields[i]['type'],
+                                'rec_id': rec.id} for i,field_name in enumerate(field_names)] for rec in mytest.models.MODELS[cur_tab_name].objects.all()]
 
         form = mytest.forms.TESTDynamicForm(mytest.models.SCHEME[cur_tab_name])
         context['form'] = form
