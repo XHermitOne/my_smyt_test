@@ -99,7 +99,7 @@ class TESTDynamicModelManager(object):
 try:
     MODEL_MANAGER = TESTDynamicModelManager()
     SCHEME, MODELS = MODEL_MANAGER.load_models(mytest.settings.MODEL_YAML_FILENAME)
-    print('DEBUG. SCHEME: %s MODELS: %s' % (SCHEME, MODELS))
+    #print('DEBUG. SCHEME: %s MODELS: %s' % (SCHEME, MODELS))
 except:
     print('ERROR. Create dynamic models')
     raise

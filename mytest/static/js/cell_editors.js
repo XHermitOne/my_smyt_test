@@ -29,8 +29,17 @@ $(document).ready(function(){
                 var newEditor = $('<input id="'+editor_id+'" class="int_edit" type="number" value="'+this.getAttribute("cell_value")+'" />');
                 $(this).replaceWith(newEditor);
                 $(".int_edit").blur(function(){
-                    //Перейти на страницу
-                    location.assign("/update/"+tab_name+"/"+rec_id+"/"+field_name+"/"+$(this).val()+"/");
+                    //Простейшая валидация
+                    var int_value = parseInt($(this).val(),10);
+                    if (isNaN(int_value))
+                    {
+                        window.alert("Не корректное значение числового поля");
+                    }
+                    else
+                    {
+                        //Перейти на страницу
+                        location.assign("/update/"+tab_name+"/"+rec_id+"/"+field_name+"/"+$(this).val()+"/");
+                    }
                 });
             case "date":
                 var newEditor = $('<input id="'+editor_id+'" class="datepicker" type="text" value="'+this.getAttribute("cell_value")+'" />');
