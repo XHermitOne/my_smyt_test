@@ -2,11 +2,14 @@
 
 import os
 import os.path
+import codecs
 import yaml
 
 from django.db import models
 
 import mytest.settings
+
+DEFAULT_ENCODING = 'utf-8'
 
 class TESTDynamicModelManager(object):
 
@@ -48,7 +51,7 @@ class TESTDynamicModelManager(object):
         if os.path.exists(sYAMLFileName):
             f=None
             try:
-                f = open(sYAMLFileName,'r')
+                f = codecs.open(sYAMLFileName,'r', DEFAULT_ENCODING)
                 try:
                     model_data = yaml.load(f)
                 except:
