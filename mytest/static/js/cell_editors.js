@@ -21,14 +21,14 @@ $(document).ready(function(){
             case "char":
                 var newEditor = $('<input id="'+editor_id+'" class="char_edit" type="text" value="'+this.getAttribute("cell_value")+'" />');
                 $(this).replaceWith(newEditor);
-                $(".char_edit").blur(function(){
+                $(".char_edit").change(function(){
                     //Перейти на страницу
                     location.assign("/update/"+tab_name+"/"+rec_id+"/"+field_name+"/"+$(this).val()+"/");
                 });
             case "int":
                 var newEditor = $('<input id="'+editor_id+'" class="int_edit" type="number" value="'+this.getAttribute("cell_value")+'" />');
                 $(this).replaceWith(newEditor);
-                $(".int_edit").blur(function(){
+                $(".int_edit").change(function(){
                     //Простейшая валидация
                     var int_value = parseInt($(this).val(),10);
                     if (isNaN(int_value))
