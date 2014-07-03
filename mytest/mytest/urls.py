@@ -8,10 +8,16 @@ admin.autodiscover()
 import mytest.views
 
 urlpatterns = patterns('',
+    #Запросы Ajax
+    url(r'^set/$', mytest.views.set_cell),
+
+
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^$', mytest.views.main_view),
+
     url(r'^update/(?P<tab_name>[^/]+)/(?P<record_id>[^/]+)/(?P<field_name>[^/]+)/(?P<new_value>[^/]+)/$', mytest.views.update_record),
     url(r'^(?P<cur_tab_name>[^/]+)/$', mytest.views.main_view),
+
 
 )

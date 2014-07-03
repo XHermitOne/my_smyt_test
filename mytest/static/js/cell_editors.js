@@ -15,6 +15,7 @@ $(document).ready(function(){
         var rec_id=this.getAttribute("rec_id");
         var field_name=this.getAttribute("field_name");
         var tab_name=this.getAttribute("tab_name");
+        var old_value = $(this).text();
 
         switch(this.getAttribute("edit_type"))
         {
@@ -22,8 +23,21 @@ $(document).ready(function(){
                 var newEditor = $('<input id="'+editor_id+'" class="char_edit" type="text" value="'+this.getAttribute("cell_value")+'" />');
                 $(this).replaceWith(newEditor);
                 $(".char_edit").change(function(){
-                    //Перейти на страницу
-                    location.assign("/update/"+tab_name+"/"+rec_id+"/"+field_name+"/"+$(this).val()+"/");
+                    //Проверка на пустую строку
+                    if ($(this).val().trim()=="")
+                    {
+                        window.alert("Пустое значение не допустимо");
+                    }
+                    else
+                    {
+                        $.post('/set/', {tab_name: tab_name,
+                                        rec_id: rec_id,
+                                        field_name: field_name,
+                                        new_value: $(this).val(),
+                                        old_value: old_value}, function(data){
+                            window.alert("Test"+data);
+                        });
+                    }
                 });
             case "int":
                 var newEditor = $('<input id="'+editor_id+'" class="int_edit" type="number" value="'+this.getAttribute("cell_value")+'" />');

@@ -4,6 +4,11 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 
+try:
+    import json
+except ImportError:
+    from django.utils import simplejson as json
+
 import mytest.models
 import mytest.forms
 
@@ -35,6 +40,35 @@ def update_record(request, tab_name=None, record_id=None, field_name=None, new_v
                 print('ERROR Update record %s in table %s', record_id, tab_name)
 
     return HttpResponseRedirect('/%s/' % tab_name)
+
+def set_cell(request):
+    """
+    Установить значение ячейки таблицы.
+    """
+    if request.method == 'POST':
+        data = dict(request.POST)
+        print('DEBUG::', data)
+
+        tab_name = data['tab_name'][0]
+        record_id = data['rec_id'][0]
+        field_name = data['field_name'][0]
+        new_value = data['new_value'][0]
+        old_value = data['old_value'][0]
+
+        if tab_name and record_id and field_name:
+            model = mytest.models.MODELS.get(tab_name, None)
+            if model:
+                record = model.objects.get(id=int(record_id))
+                if record:
+                    try:
+                        if getattr(record, field_name) != new_value:
+                            setattr(record, field_name, new_value)
+                            record.save()
+                            return HttpResponse(new_value)
+                    except:
+                        print('ERROR Update record %s in table %s', record_id, tab_name)
+        return HttpResponse(old_value)
+    return HttpResponse("err")
 
 def main_view(request, cur_tab_name=None):
     """
