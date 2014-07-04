@@ -9,7 +9,8 @@ import mytest.views
 
 urlpatterns = patterns('',
     #Запросы Ajax
-    url(r'^set/$', mytest.views.set_cell),
+    url(r'^ajaxset/$', mytest.views.ajax_set_cell),
+    url(r'^ajaxadd/(?P<cur_tab_name>[^/]+)/$', mytest.views.ajax_add_record),
 
 
     url(r'^admin/', include(admin.site.urls)),

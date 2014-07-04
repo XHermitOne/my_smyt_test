@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-#from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 
@@ -41,13 +40,13 @@ def update_record(request, tab_name=None, record_id=None, field_name=None, new_v
 
     return HttpResponseRedirect('/%s/' % tab_name)
 
-def set_cell(request):
+def ajax_set_cell(request):
     """
     Установить значение ячейки таблицы.
     """
     if request.method == 'POST':
         data = dict(request.POST)
-        print('DEBUG::', data)
+        # print('DEBUG::', data)
 
         tab_name = data['tab_name'][0]
         record_id = data['rec_id'][0]
@@ -68,6 +67,28 @@ def set_cell(request):
                     except:
                         print('ERROR Update record %s in table %s', record_id, tab_name)
         return HttpResponse(old_value)
+    return HttpResponse("err")
+
+def ajax_add_record(request, cur_tab_name):
+    """
+    Добавить новую запись в таблицу.
+    """
+    if request.method == 'POST':
+        new_record = dict([(field_name, value[0]) for field_name, value in dict(request.POST).items()])
+
+        model = mytest.models.MODELS.get(cur_tab_name, None)
+        if model:
+            new_rec = model(**new_record)
+            new_rec.save()
+
+            #Подготоыить данные для отправки браузеру
+            record = {}
+            record['scheme'] = mytest.models.SCHEME[cur_tab_name]['fields']
+            new_record['id'] = new_rec.id
+            record ['data'] = new_record
+            #print('NEW RECORD::', record)
+            return HttpResponse(json.dumps(record),
+                                content_type='application/json')
     return HttpResponse("err")
 
 def main_view(request, cur_tab_name=None):

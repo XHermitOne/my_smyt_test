@@ -34,9 +34,11 @@ class TESTDynamicForm(forms.Form):
         Создание поля формы по описанию поля модели.
         """
         if field['type'] == 'char':
-            return forms.CharField(label=field['title'])
+            return forms.CharField(label=field['title'],
+                                   widget=forms.TextInput(attrs={'class': 'char_field_form'}))
         elif field['type'] == 'int':
-            return forms.IntegerField(label=field['title'])
+            return forms.IntegerField(label=field['title'],
+                                      widget=forms.NumberInput(attrs={'class': 'int_field_form'}))
         elif field['type'] == 'date':
             return forms.DateField(label=field['title'],
                                    input_formats=DATE_FORMATS,

@@ -16,8 +16,9 @@ $(document).ready(function(){
         var field_name=this.getAttribute("field_name");
         var tab_name=this.getAttribute("tab_name");
         var old_value = $(this).text();
+        var edit_type = this.getAttribute("edit_type");
 
-        switch(this.getAttribute("edit_type"))
+        switch(edit_type)
         {
             case "char":
                 var newEditor = $('<input id="'+editor_id+'" class="char_edit" type="text" value="'+this.getAttribute("cell_value")+'" />');
@@ -30,13 +31,7 @@ $(document).ready(function(){
                     }
                     else
                     {
-                        $.post('/set/', {tab_name: tab_name,
-                                        rec_id: rec_id,
-                                        field_name: field_name,
-                                        new_value: $(this).val(),
-                                        old_value: old_value}, function(data){
-                            window.alert("Test"+data);
-                        });
+                        ajax_post_set(editor_id, edit_type, tab_name, rec_id, field_name, $(this).val(), old_value);
                     }
                 });
             case "int":
@@ -45,14 +40,13 @@ $(document).ready(function(){
                 $(".int_edit").change(function(){
                     //Простейшая валидация
                     var int_value = parseInt($(this).val(),10);
-                    if (isNaN(int_value))
+                    if (isNaN(int_value) | (int_value < 0))
                     {
                         window.alert("Не корректное значение числового поля");
                     }
                     else
                     {
-                        //Перейти на страницу
-                        location.assign("/update/"+tab_name+"/"+rec_id+"/"+field_name+"/"+$(this).val()+"/");
+                        ajax_post_set(editor_id, edit_type, tab_name, rec_id, field_name, $(this).val(), old_value);
                     }
                 });
             case "date":
@@ -66,7 +60,7 @@ $(document).ready(function(){
                     changeYear: true,
                     numberOfMonths: 1,
                     onSelect: function(selectedDate) {
-                            location.assign("/update/"+tab_name+"/"+rec_id+"/"+field_name+"/"+$(this).val()+"/");
+                        ajax_post_set(editor_id, edit_type, tab_name, rec_id, field_name, selectedDate, old_value);
                 }
                 });
         }
@@ -76,3 +70,18 @@ $(document).ready(function(){
     });
 });
 
+function ajax_post_set(editor_id, edit_type, tab_name, rec_id, field_name, new_value, old_value)
+{
+    //Отправка Ajax запроса
+    $.post('/ajaxset/', {tab_name: tab_name,
+        rec_id: rec_id,
+        field_name: field_name,
+        new_value: new_value,
+        old_value: old_value}, function(value){
+            //Получение ответа от сервера
+            var newDiv = $('<div id="'+editor_id+'" class="data_cell" edit_type="'+edit_type+'" cell_value="'+value+'" field_name="'+field_name+'" rec_id="'+rec_id+'" tab_name="'+tab_name+'">'+value+'</div>');
+            //console.log("Test"+$('#'+editor_id).html());
+            $('#'+editor_id).replaceWith(newDiv);
+            });
+
+};
