@@ -79,7 +79,8 @@ function add_form_valid(cur_tab_name){
 function ajax_post_add_record(record, cur_tab_name)
 {
     //Отправка Ajax запроса
-    $.post("/ajaxadd/"+cur_tab_name+"/", record, function(new_record){
+    $.post("/ajaxadd/"+cur_tab_name+"/", record)
+        .done(function(new_record){
             //Получение ответа от сервера
 
             //После добавления записи очистить поля формы

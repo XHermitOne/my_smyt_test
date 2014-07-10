@@ -11,6 +11,10 @@ except ImportError:
 import mytest.models
 import mytest.forms
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 
 def add_new_record(request, cur_tab_name=None, *args, **kwargs):
@@ -73,19 +77,27 @@ def ajax_add_record(request, cur_tab_name):
     """
     Добавить новую запись в таблицу.
     """
+    logger.info('Start')
     if request.method == 'POST':
+        logger.info('1')
         new_record = dict([(field_name, value[0]) for field_name, value in dict(request.POST).items()])
 
+        logger.info('2')
         model = mytest.models.MODELS.get(cur_tab_name, None)
+        logger.info('3')
         if model:
+            logger.info('4')
             new_rec = model(**new_record)
+            logger.info('5')
             new_rec.save()
 
+            logger.info('6')
             #Подготоыить данные для отправки браузеру
             record = {}
             record['scheme'] = mytest.models.SCHEME[cur_tab_name]['fields']
             new_record['id'] = new_rec.id
             record ['data'] = new_record
+            logger.info('7')
             #print('NEW RECORD::', record)
             return HttpResponse(json.dumps(record),
                                 content_type='application/json')
@@ -122,14 +134,18 @@ def main_view(request, cur_tab_name=None):
         context['table_titles'] = [tab.get('title', '') for tab in mytest.models.SCHEME.values()]
 
         context['cur_tab_name'] = cur_tab_name
-        context['cur_table'] = mytest.models.SCHEME[cur_tab_name]
-        fields = mytest.models.SCHEME[cur_tab_name]['fields']
-        field_names = [field['id'] for field in fields]
-        context['fields'] = fields
-        context['records'] = [[{'value': getattr(rec, field_name).strftime(DEFAULT_DATE_FORMAT) if fields[i]['type'] == 'date' else getattr(rec, field_name),
+        context['cur_table'] = mytest.models.SCHEME.get(cur_tab_name, None)
+        if context['cur_table']:
+            fields = mytest.models.SCHEME[cur_tab_name]['fields']
+            field_names = [field['id'] for field in fields]
+            context['fields'] = fields
+            context['records'] = [[{'value': getattr(rec, field_name).strftime(DEFAULT_DATE_FORMAT) if fields[i]['type'] == 'date' else getattr(rec, field_name),
                                 'field_name': field_name,
                                 'type': fields[i]['type'],
                                 'rec_id': rec.id} for i,field_name in enumerate(field_names)] for rec in mytest.models.MODELS[cur_tab_name].objects.all()]
+        else:
+            context['fields'] = []
+            context['records'] = []
 
         form = mytest.forms.TESTDynamicForm(mytest.models.SCHEME[cur_tab_name])
         context['form'] = form
