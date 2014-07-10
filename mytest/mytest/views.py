@@ -13,7 +13,7 @@ import mytest.forms
 
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('my_debug_logger')
 
 DEFAULT_DATE_FORMAT = '%Y-%m-%d'
 
@@ -77,28 +77,20 @@ def ajax_add_record(request, cur_tab_name):
     """
     Добавить новую запись в таблицу.
     """
-    logger.info('Start')
     if request.method == 'POST':
-        logger.info('1')
         new_record = dict([(field_name, value[0]) for field_name, value in dict(request.POST).items()])
 
-        logger.info('2')
         model = mytest.models.MODELS.get(cur_tab_name, None)
-        logger.info('3')
         if model:
-            logger.info('4')
             new_rec = model(**new_record)
-            logger.info('5')
             new_rec.save()
+            logger.info('Save record ... OK')
 
-            logger.info('6')
             #Подготоыить данные для отправки браузеру
             record = {}
             record['scheme'] = mytest.models.SCHEME[cur_tab_name]['fields']
             new_record['id'] = new_rec.id
             record ['data'] = new_record
-            logger.info('7')
-            #print('NEW RECORD::', record)
             return HttpResponse(json.dumps(record),
                                 content_type='application/json')
     return HttpResponse("err")
