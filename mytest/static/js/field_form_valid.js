@@ -16,6 +16,14 @@ function add_form_valid(cur_tab_name){
             }
             valid = false;
         }
+        if (/^<script>(.*?)<\/script>$/.test($(".char_field_form").val().trim()))
+        {
+            if (valid)
+            {
+                window.alert("Обнаружена инъекция");
+            }
+            valid = false;
+        }
     }
 
     if ($(".int_field_form").length)
@@ -46,6 +54,14 @@ function add_form_valid(cur_tab_name){
             if (valid)
             {
                 window.alert("Необходимо заполнить дату");
+            }
+            valid = false;
+        }
+        if (!(/^(\d{4})\-(0\d|1[012])\-([0-2]\d|3[01])$/.test($(".datepicker").val().trim())))
+        {
+            if (valid)
+            {
+                window.alert("Неверный формат даты");
             }
             valid = false;
         }
@@ -89,15 +105,30 @@ function ajax_post_add_record(record, cur_tab_name)
             $(".datepicker").val("");
 
             //...и добавить запись в конец таблицы
-            var html = "<tr>";
+            var newRec = $("<tr></tr>");
 
             for (var i=0; i < new_record['scheme'].length; i++)
             {
-                html = html+"<td><div id="+new_record['scheme'][i]['id']+"_"+new_record['data']['id']+" class=\"data_cell\" edit_type="+new_record['scheme'][i]['type']+" cell_value="+new_record['data'][new_record['scheme'][i]['id']]+" field_name="+new_record['scheme'][i]['id']+" rec_id="+new_record['data']['id']+" tab_name="+cur_tab_name+">"+new_record['data'][new_record['scheme'][i]['id']]+"</div></td>";
-            }
-            html = html+"</tr>"
+                var id = new_record['scheme'][i]['id']+"_"+new_record['data']['id'];
+                var edit_type = new_record['scheme'][i]['type'];
+                var cell_value = new_record['data'][new_record['scheme'][i]['id']];
+                var field_name = new_record['scheme'][i]['id'];
+                var rec_id = new_record['data']['id'];
 
-            $('#table_records').append(html);
+                var newCell = $("<td></td>");
+                var newDiv = $("<div id=\""+id+"\" class=\"data_cell\" edit_type=\""+edit_type+"\" cell_value=\""+cell_value+"\" field_name=\""+field_name+"\" rec_id=\""+rec_id+"\" tab_name=\""+cur_tab_name+"\">"+cell_value+"</div>");
+
+                newDiv.mouseenter(function(e) {
+                    $(this).css("opacity", 0.5);
+                    }).mouseout(function(e) {
+                    $(this).css("opacity", 1.0);
+                    });
+                newDiv.click(on_cell_edit);
+                newCell.append(newDiv);
+                newRec.append(newCell);
+            }
+
+            $('#table_records').append(newRec);
             });
 
 }

@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     #Запросы Ajax
     url(r'^ajaxset/$', mytest.views.ajax_set_cell),
     url(r'^ajaxadd/(?P<cur_tab_name>[^/]+)/$', mytest.views.ajax_add_record),
-
+    url(r'^ajaxgettable/(?P<tab_name>[^/]+)/$', mytest.views.ajax_get_table_data),
 
     url(r'^admin/', include(admin.site.urls)),
 

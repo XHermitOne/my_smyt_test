@@ -11,6 +11,8 @@ except ImportError:
 import mytest.models
 import mytest.forms
 
+import datetime
+
 import logging
 
 logger = logging.getLogger('my_debug_logger')
@@ -94,6 +96,26 @@ def ajax_add_record(request, cur_tab_name):
             return HttpResponse(json.dumps(record),
                                 content_type='application/json')
     return HttpResponse("err")
+
+def ajax_get_table_data(request, tab_name):
+    """
+    Получить данные о таблице.
+    """
+    if request.method == 'GET':
+        data = {}
+        data['scheme'] = mytest.models.SCHEME[tab_name]
+        data['records'] = []
+        model = mytest.models.MODELS.get(tab_name, None)
+        if model:
+            #logger.info('MODEL %s'%model)
+            records = [[field.strftime(DEFAULT_DATE_FORMAT) if type(field) == datetime.date else field for field in rec] for rec in model.objects.all().values_list()]
+            data['records'] = records
+            #logger.info('RECORDS %s'%data['records'])
+        return HttpResponse(json.dumps(data),
+                    content_type='application/json')
+
+    return HttpResponse("err")
+
 
 def main_view(request, cur_tab_name=None):
     """

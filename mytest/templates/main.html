@@ -8,6 +8,7 @@
 	<script type="text/javascript" src="/static/js/simple_datepicker.js"></script>
 	<script type="text/javascript" src="/static/js/cell_editors.js"></script>
 	<script type="text/javascript" src="/static/js/field_form_valid.js"></script>
+	<script type="text/javascript" src="/static/js/tab_menu_navigate.js"></script>
 </head>
 <body>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -15,7 +16,7 @@
     <td height="100%">
       <ul width="235" height="100%">
         {% for tab in tables %}
-        <li> <a href="/{{ tab.name }}/">{{ tab.title }} </a></li>
+        <li> <a onclick="on_table_menu_click('{{ tab.name }}')">{{ tab.title }} </a></li>
         {% endfor %}
       </ul>
     </td>
@@ -37,8 +38,8 @@
           {% endfor %}
         </table>
 
-        <div>{{ cur_table.title }}. Добавление записи:</div>
-        <form>
+        <div id="form_title">{{ cur_table.title }}. Добавление записи:</div>
+        <form id="add_form">
         {{ form.as_p }}
         <input value="Добавить" class="button" type="button" onclick="add_form_valid('{{ cur_table.name }}')">
 
