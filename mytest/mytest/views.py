@@ -161,8 +161,10 @@ def main_view(request, cur_tab_name=None):
             context['fields'] = []
             context['records'] = []
 
-        form = mytest.forms.TESTDynamicForm(mytest.models.SCHEME[cur_tab_name])
-        context['form'] = form
+        tab = mytest.models.SCHEME.get(cur_tab_name,None)
+        if tab:
+            form = mytest.forms.TESTDynamicForm(tab)
+            context['form'] = form
 
     return render_to_response('main.html', context)
 
